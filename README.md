@@ -33,7 +33,7 @@ A Unity project template for creating custom visuals.
 - Right click inside the folder containing your scene prefab and select Create > Visuals Module, name it Module
 - Add an element entry to the module and assign your scene prefab to it. Set Root to 0 if you want the scene to be anchored to the world in-game, or 1 if you want it to be anchored to the camera (1 is recommended)
 - Assign an asset bundle to both your scene and your module (at the bottom of the Inspector)
-- Open the AssetBundle Browser (Window > AssetBundleBrowser) and click Build
+- Open the AssetBundle Browser (Window > AssetBundle Browser) and click Build
 - All AssetBundles will be built to
   - ```<Project Folder>/AssetBundles/StandaloneWindows```
 - Copy both the asset bundle file and manifest file for each bundle to the AssetBundles folder in your customs folder

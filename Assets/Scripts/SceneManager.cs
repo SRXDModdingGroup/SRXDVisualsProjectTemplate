@@ -1,4 +1,3 @@
-using DefaultNamespace;
 using SRXDCustomVisuals.Core;
 using UnityEngine;
 using UnityEngine.Rendering;

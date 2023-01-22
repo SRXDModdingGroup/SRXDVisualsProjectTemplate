@@ -1,14 +1,13 @@
+using DefaultNamespace;
 using SRXDCustomVisuals.Core;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class SceneManager : MonoBehaviour {
-    [SerializeField] private VisualElement[] visualElements;
     [SerializeField] private GameObject gameplayOverlay;
     [SerializeField] private Volume postProcessingVolume;
 
-    private VisualsSceneManager sceneManager;
     private bool showGameplayOverlay = true;
     private bool enablePostProcessing = true;
     private float bloom = 0.5f;
@@ -18,37 +17,8 @@ public class SceneManager : MonoBehaviour {
     private bool spinningRight;
     private bool spinningLeft;
     private bool scratching;
-    private IVisualsEvent hitMatchEvent;
-    private IVisualsEvent hitTapEvent;
-    private IVisualsEvent hitBeatEvent;
-    private IVisualsEvent hitSpinRightEvent;
-    private IVisualsEvent hitSpinLeftEvent;
-    private IVisualsEvent hitScratchEvent;
-    private IVisualsProperty holdingProperty;
-    private IVisualsProperty beatHoldingProperty;
-    private IVisualsProperty spinningRightProperty;
-    private IVisualsProperty spinningLeftProperty;
-    private IVisualsProperty scratchingProperty;
 
     private void Start() {
-        var scene = new VisualsScene(visualElements);
-
-        sceneManager = new VisualsSceneManager();
-        sceneManager.SetScene(scene);
-
-        hitMatchEvent = sceneManager.GetEvent("HitMatch");
-        hitTapEvent = sceneManager.GetEvent("HitTap");
-        hitBeatEvent = sceneManager.GetEvent("HitBeat");
-        hitSpinRightEvent = sceneManager.GetEvent("HitSpinRight");
-        hitSpinLeftEvent = sceneManager.GetEvent("HitSpinLeft");
-        hitScratchEvent = sceneManager.GetEvent("HitScratch");
-
-        holdingProperty = sceneManager.GetProperty("Holding");
-        beatHoldingProperty = sceneManager.GetProperty("BeatHolding");
-        spinningRightProperty = sceneManager.GetProperty("SpinningRight");
-        spinningLeftProperty = sceneManager.GetProperty("SpinningLeft");
-        scratchingProperty = sceneManager.GetProperty("Scratching");
-
         postProcessingVolume.profile.TryGet(out bloomComponent);
     }
 
@@ -66,36 +36,48 @@ public class SceneManager : MonoBehaviour {
             bloomComponent.intensity.value = bloom;
         
         GUILayout.Space(20f);
-        GUILayout.Label("Events and Properties");
-        
+        GUILayout.Label("Events");
+
         if (GUILayout.Button("Hit Match"))
-            hitMatchEvent.Invoke();
+            SendNoteHit(NoteIndex.HitMatch);
         
         if (GUILayout.Button("Hit Tap"))
-            hitTapEvent.Invoke();
+            SendNoteHit(NoteIndex.HitTap);
         
         if (GUILayout.Button("Hit Beat"))
-            hitBeatEvent.Invoke();
+            SendNoteHit(NoteIndex.HitBeat);
         
         if (GUILayout.Button("Hit Spin Right"))
-            hitSpinRightEvent.Invoke();
+            SendNoteHit(NoteIndex.HitSpinRight);
         
         if (GUILayout.Button("Hit Spin Left"))
-            hitSpinLeftEvent.Invoke();
+            SendNoteHit(NoteIndex.HitSpinLeft);
         
         if (GUILayout.Button("Hit Scratch"))
-            hitScratchEvent.Invoke();
-
-        holding = GUILayout.Toggle(holding, "Holding");
-        beatHolding = GUILayout.Toggle(beatHolding, "Beat Holding");
-        spinningRight = GUILayout.Toggle(spinningRight, "Spinning Right");
-        spinningLeft = GUILayout.Toggle(spinningLeft, "Spinning Left");
-        scratching = GUILayout.Toggle(scratching, "Scratching");
+            SendNoteHit(NoteIndex.HitScratch);
         
-        holdingProperty.SetBool(holding);
-        beatHoldingProperty.SetBool(beatHolding);
-        spinningRightProperty.SetBool(spinningRight);
-        spinningLeftProperty.SetBool(spinningLeft);
-        scratchingProperty.SetBool(scratching);
+        UpdateNoteHold(ref holding, GUILayout.Toggle(holding, "Holding"), NoteIndex.Hold);
+        UpdateNoteHold(ref beatHolding, GUILayout.Toggle(beatHolding, "Beat Holding"), NoteIndex.HoldBeat);
+        UpdateNoteHold(ref spinningRight, GUILayout.Toggle(spinningRight, "Spinning Right"), NoteIndex.HoldSpinRight);
+        UpdateNoteHold(ref spinningLeft, GUILayout.Toggle(spinningLeft, "Spinning Left"), NoteIndex.HoldSpinLeft);
+        UpdateNoteHold(ref scratching, GUILayout.Toggle(scratching, "Scratching"), NoteIndex.HoldScratch);
+    }
+
+    private static void SendNoteHit(NoteIndex index) {
+        var visualsEventManager = VisualsEventManager.Instance;
+        
+        visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.On, (int) index, 255d));
+        visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, (int) index, 255d));
+    }
+
+    private static void UpdateNoteHold(ref bool state, bool newState, NoteIndex index) {
+        var visualsEventManager = VisualsEventManager.Instance;
+        
+        if (!state && newState)
+            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.On, (int) index, 255d));
+        else if (state && !newState)
+            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, (int) index, 255d));
+
+        state = newState;
     }
 }

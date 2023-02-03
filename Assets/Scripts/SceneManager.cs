@@ -17,8 +17,8 @@ public class SceneManager : MonoBehaviour {
     private bool spinningRight;
     private bool spinningLeft;
     private bool scratching;
-    private int eventIndex;
-    private double eventValue = 255d;
+    private string eventIndex = "0";
+    private string eventValue = "255.0";
 
     private void Start() {
         postProcessingVolume.profile.TryGet(out bloomComponent);
@@ -70,47 +70,64 @@ public class SceneManager : MonoBehaviour {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Index:");
 
-        string field = GUILayout.TextField(eventIndex.ToString(), GUILayout.Width(200f));
-
-        if (string.IsNullOrWhiteSpace(field))
-            eventIndex = 0;
-        else if (int.TryParse(field, out int newEventIndex))
-            eventIndex = Mathf.Clamp(newEventIndex, 0, 255);
+        eventIndex = GUILayout.TextField(eventIndex, GUILayout.Width(200f));
         
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         GUILayout.Label("Value:");
 
-        field = GUILayout.TextField(eventValue.ToString("0.0#"), GUILayout.Width(200f));
-        
-        if (string.IsNullOrWhiteSpace(field))
-            eventValue = 0d;
-        else if (double.TryParse(field, out double newEventValue))
-            eventValue = Math.Clamp(newEventValue, 0d, 255d);
-        
+        eventValue = GUILayout.TextField(eventValue, GUILayout.Width(200f));
+
         GUILayout.EndHorizontal();
         
-        if (GUILayout.Button("Hit"))
-            SendEventHit(eventIndex, eventValue);
+        if (GUILayout.Button("Hit")) {
+            GetFields(out int index, out float value);
+            SendEventHit(index, value);
+        }
         
-        if (GUILayout.Button("On"))
-            SendEvent(VisualsEventType.On, eventIndex, eventValue);
+        if (GUILayout.Button("On")) {
+            GetFields(out int index, out float value);
+            SendEvent(VisualsEventType.On, index, value);
+        }
         
-        if (GUILayout.Button("Off"))
-            SendEvent(VisualsEventType.Off, eventIndex);
+        if (GUILayout.Button("Off")) {
+            GetFields(out int index, out _);
+            SendEvent(VisualsEventType.Off, index);
+        }
         
-        if (GUILayout.Button("Set Control"))
-            SendEvent(VisualsEventType.ControlChange, eventIndex, eventValue);
+        if (GUILayout.Button("Set Control")) {
+            GetFields(out int index, out float value);
+            SendEvent(VisualsEventType.ControlChange, index, value);
+        }
+        
+        if (GUILayout.Button("Reset All"))
+            VisualsEventManager.Instance.ResetAll();
     }
 
-    private static void SendEventHit(int index, double value = 255d) {
+    private void GetFields(out int index, out float value) {
+        if (int.TryParse(eventIndex, out index))
+            index = Math.Clamp(index, 0, 255);
+        else
+            index = 0;
+
+        eventIndex = index.ToString();
+
+        if (float.TryParse(eventValue, out value))
+            value = Mathf.Clamp(value, 0f, 255f);
+        else
+            value = 255f;
+
+        eventValue = value.ToString("0.0#");
+    }
+
+    private static void SendEventHit(int index, float value = 255f) {
         var visualsEventManager = VisualsEventManager.Instance;
         
         visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.On, index, value));
-        visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, index, 255d));
+        visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, index, 255f));
     }
     
-    private static void SendEvent(VisualsEventType type, int index, double value = 255d) {
+    private static void SendEvent(VisualsEventType type, int index, float value = 255f) {
         var visualsEventManager = VisualsEventManager.Instance;
         
         visualsEventManager.SendEvent(new VisualsEvent(type, index, value));
@@ -120,9 +137,9 @@ public class SceneManager : MonoBehaviour {
         var visualsEventManager = VisualsEventManager.Instance;
         
         if (!state && newState)
-            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.On, index, 255d));
+            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.On, index, 255f));
         else if (state && !newState)
-            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, index, 255d));
+            visualsEventManager.SendEvent(new VisualsEvent(VisualsEventType.Off, index, 255f));
 
         state = newState;
     }

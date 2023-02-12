@@ -13,31 +13,20 @@ A Unity project template for creating custom visuals.
 ### Creating a New Visual Element
 
 - Create a new folder in the Bundles folder to contain the assets for your visual element
-- Duplicate the VisualsSceneTemplate prefab and place it in your new folder. Name it Scene
-- Open your scene prefab and add visual objects under the Visuals gameObject
-- Place an instance of your scene prefab into the scene hierarchy. Ensure that the instance's transform is all 0 for position and rotation, and all 1 for scale
-- Press Play to enter the game view and see a preview of how the scene will appear in-game
-
-### Adding Visuals Controllers
-
-- Visuals controllers are scripts that can listen for events and properties in order to synchronize visual effects with gameplay
-- To add a new controller, create an empty gameObject under the Controllers gameObject in your scene prefab
-- Attach a script that derives from VisualsController to this gameObject (a few controller scripts are provided by SRXDCustomVisuals.Behaviors and have names ending with "Controller")
-- Assign target visuals to this controller and tweak its parameters to your liking
-- Go to the VisualElement script at the root of your scene prefab and add a new mapping for the event or property that you want to access the new controller
-- Assign your controller to the mapping's Target. Enter the name of the controller action or property that you want the mapping to control
-- Press Play to enter the game view. Click the buttons and toggles on the left side to simulate in-game events and properties
+- Create a new folder in the Scripts folder to contain any scripts used by your visual element
+- Create a new GameObject in your scene. Ensure that the prefab's transform is all 0 for position and rotation, and all 1 for scale
+- Add the VisualsEventReceiver script to your GameObject
+- Drag the GameObject into your new assets folder to create a prefab
+- After adding visuals to your prefab, press Play to enter the game view and see a preview of how the scene will appear in-game
 
 ### Building AssetBundles and Adding Them to SRXD
 
-- Right click inside the folder containing your scene prefab and select Create > Visuals Module, name it Module
-- Add an element entry to the module and assign your scene prefab to it. Set Root to 0 if you want the scene to be anchored to the world in-game, or 1 if you want it to be anchored to the camera (1 is recommended)
-- Assign an asset bundle to both your scene and your module (at the bottom of the Inspector)
+- Select your prefab asset and assign an asset bundle at the bottom of the inspector
 - Open the AssetBundle Browser (Window > AssetBundle Browser) and click Build
-- All AssetBundles will be built to
+- By default, all AssetBundles will be built to
   - ```<Project Folder>/AssetBundles/StandaloneWindows```
-- Copy both the asset bundle file and manifest file for each bundle to the AssetBundles folder in your customs folder
-- Create a new .json file in the Backgrounds folder in your customs folder. Add the following (you may omit the reference to the "common" bundle if you did not use any assets from it):
+- Copy both the asset bundle file and manifest file for each bundle to the AssetBundles folder in your plugins folder
+- Create a new .json file in the Backgrounds folder in your plugins folder. Add the following:
 
 ```json
 {
@@ -46,10 +35,15 @@ A Unity project template for creating custom visuals.
 		"<Bundle Name>",
 		"common"
 	],
-	"modules": [
+	"assemblies": [
+		"<Assembly Name>",
+		"SRXDBackgrounds.Common.dll"
+	],
+	"elements": [
 		{
 			"bundle": "<Bundle Name>",
-			"asset": "Module"
+			"asset": "<Prefab Name>",
+			"root": 1
 		}
 	]
 }

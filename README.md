@@ -13,7 +13,7 @@ A Unity project template for creating custom visuals.
 ### Creating a New Visual Element
 
 - Create a new folder in the Bundles folder to contain the assets for your visual element
-- Create a new folder in the Scripts folder to contain any scripts used by your visual element
+- Create a new folder in the Scripts folder to contain any scripts used by your visual element. Add an assembly definition to this folder
 - Create a new GameObject in your scene. Ensure that the prefab's transform is all 0 for position and rotation, and all 1 for scale
 - Add the VisualsEventReceiver script to your GameObject
 - Drag the GameObject into your new assets folder to create a prefab
@@ -21,7 +21,7 @@ A Unity project template for creating custom visuals.
 
 ### Building AssetBundles and Adding Them to SRXD
 
-- Select your prefab asset and assign an asset bundle at the bottom of the inspector
+- Select your prefab asset and assign an asset bundle at the bottom of the Inspector
 - Open the AssetBundle Browser (Window > AssetBundle Browser) and click Build
 - By default, all AssetBundles will be built to
   - ```<Project Folder>/AssetBundles/StandaloneWindows```

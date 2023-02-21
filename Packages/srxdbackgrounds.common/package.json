@@ -1,0 +1,8 @@
+{
+  "name": "srxdbackgrounds.common",
+  "version": "1.0.0",
+  "displayName": "SRXD Backgrounds Common",
+  "unity": "2022.1",
+  "unityRelease": "12f1",
+  "description": "Contains common assets for use in cusom SRXD backgrounds"
+}

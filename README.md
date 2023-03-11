@@ -3,11 +3,11 @@ A Unity project template for creating custom visuals.
 
 ### Getting Started
 
-- Install the SRXDCustomVisuals mod at https://github.com/SRXDModdingGroup/SRXDCustomVisuals/releases/latest
+- Download the SRXDCustomVisuals mod at https://github.com/SRXDModdingGroup/SRXDCustomVisuals/releases/latest
 - Extract SRXDCustomVisuals.zip to your BepInEx plugins folder at
   - ```C:\Program Files (x86)\Steam\steamapps\common\Spin Rhythm\BepInEx\plugins```
 - Install Unity Hub and Unity version 2022.1.12
-- Download the latest release of srxd.visuals.tgz
+- Download the latest release of srxd.visuals.tgz at https://github.com/SRXDModdingGroup/SRXDVisualsProjectTemplate/releases/latest
 - Place the file in the Unity projects template folder at
   - ```C:\Program Files\Unity\Hub\Editor\2022.1.12f1\Editor\Data\Resources\PackageManager\ProjectTemplates```
 - Restart Unity Hub and create a new Unity project using this template

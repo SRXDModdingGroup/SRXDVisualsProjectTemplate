@@ -171,10 +171,11 @@
       "url": "https://packages.unity.com"
     },
     "srxdbackgrounds.common": {
-      "version": "file:srxdbackgrounds.common",
+      "version": "https://github.com/SRXDModdingGroup/srxdbackgrounds.common.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "094be6008ebdacc134d946f690252b7884a38592"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

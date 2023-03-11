@@ -27,7 +27,7 @@ A Unity project template for creating custom visuals.
 - Select your prefab asset and assign an asset bundle at the bottom of the Inspector
 - Open the AssetBundle Browser (Window > AssetBundle Browser) and click Build
 - By default, all Asset Bundles will be built to
-  - ```<Project Folder>/AssetBundles/StandaloneWindows```
+  - ```<Project Folder>\AssetBundles\StandaloneWindows```
 - Go to your BepInEx plugins folder
 - Copy both the asset bundle file and manifest file for each bundle to the AssetBundles folder
 - Create a new .json file in the Backgrounds folder. Add the following, filling in the appropriate bundle, assembly, and prefab names:
